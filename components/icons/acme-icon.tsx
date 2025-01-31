@@ -4,8 +4,8 @@ import {Svg} from '../styles/svg';
 export const AcmeIcon = () => {
    return (
       <Svg
-         width="42"
-         height="42"
+         width="30"
+         height="30"
          viewBox="0 0 56 56"
          fill="none"
          xmlns="http://www.w3.org/2000/svg"

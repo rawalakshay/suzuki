@@ -1,8 +1,8 @@
-import {Table} from '@nextui-org/react';
+import { Table } from '@nextui-org/react';
 import React from 'react';
-import {Box} from '../styles/box';
-import {columns, users} from './data';
-import {RenderCell} from './render-cell';
+import { Box } from '../styles/box';
+import { columns, users } from './data';
+import { RenderCell } from './render-cell';
 
 export const TableWrapper = () => {
    return (
@@ -22,7 +22,7 @@ export const TableWrapper = () => {
                width: '100%',
                px: 0,
             }}
-            selectionMode="multiple"
+         // selectionMode="multiple"
          >
             <Table.Header columns={columns}>
                {(column) => (
@@ -40,7 +40,9 @@ export const TableWrapper = () => {
                   <Table.Row>
                      {(columnKey) => (
                         <Table.Cell>
-                           {RenderCell({user: item, columnKey: columnKey})}
+                           {columnKey === 'interest'
+                              ? item[columnKey].join(', ')
+                              : RenderCell({ user: item, columnKey: columnKey })}
                         </Table.Cell>
                      )}
                   </Table.Row>
@@ -51,7 +53,7 @@ export const TableWrapper = () => {
                noMargin
                align="center"
                rowsPerPage={8}
-               onPageChange={(page) => console.log({page})}
+               onPageChange={(page) => console.log({ page })}
             />
          </Table>
       </Box>

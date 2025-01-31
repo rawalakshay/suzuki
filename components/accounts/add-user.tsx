@@ -1,15 +1,54 @@
-import {Button, Divider, Input, Modal, Text} from '@nextui-org/react';
+import { Button, Divider, Input, Modal, Text } from '@nextui-org/react';
 import React from 'react';
-import {Flex} from '../styles/flex';
+import { Flex } from '../styles/flex';
+import { useState } from 'react';
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const AddUser = () => {
-   const [visible, setVisible] = React.useState(false);
+   const [visible, setVisible] = useState(false);
    const handler = () => setVisible(true);
 
+   const [formData, setFormData] = useState({
+      userName: "",
+      mobile: "",
+      age: "",
+      email: "",
+      interest: ""
+   });
+
+   const handleChange = (e: any) => {
+      console.log('form e :>>', e.target.name, e.target.value);
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+   };
+
    const closeHandler = () => {
+      addUser(formData);
       setVisible(false);
       console.log('closed');
    };
+
+   async function addUser(userDetails: any) {
+      console.log("userDetails :>>", userDetails);
+      try {
+         const response = await axios.get("https://v2.jokeapi.dev/joke/Any");
+         // toast.success("User added successfully!", { position: "top-right" });
+         toast.success("User added successfully!", {
+            theme: "dark", // Sets the toast to dark mode
+            position: "top-right",
+            autoClose: 3000, // Closes after 3 seconds
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+         });
+         console.log("User added successfully:", response.data);
+      } catch (error) {
+         console.error("Error while adding user:", error);
+      }
+   }
 
    return (
       <div>
@@ -21,45 +60,51 @@ export const AddUser = () => {
             aria-labelledby="modal-title"
             width="600px"
             open={visible}
-            onClose={closeHandler}
+         // onClose={closeHandler}
          >
-            <Modal.Header css={{justifyContent: 'start'}}>
+            <Modal.Header css={{ justifyContent: 'start' }}>
                <Text id="modal-title" h4>
                   Add new user
                </Text>
             </Modal.Header>
-            <Divider css={{my: '$5'}} />
-            <Modal.Body css={{py: '$10'}}>
+            <Divider css={{ my: '$5' }} />
+            <Modal.Body css={{ py: '$10' }}>
                <Flex
                   direction={'column'}
                   css={{
                      'flexWrap': 'wrap',
                      'gap': '$8',
-                     '@lg': {flexWrap: 'nowrap', gap: '$12'},
+                     '@lg': { flexWrap: 'nowrap', gap: '$12' },
                   }}
                >
                   <Flex
                      css={{
                         'gap': '$10',
                         'flexWrap': 'wrap',
-                        '@lg': {flexWrap: 'nowrap'},
+                        '@lg': { flexWrap: 'nowrap' },
                      }}
                   >
                      <Input
-                        label="First Name"
+                        label="User Name"
                         bordered
                         clearable
                         fullWidth
                         size="lg"
-                        placeholder="First Name"
+                        placeholder="User Name"
+                        name="userName"
+                        value={formData.userName}
+                        onChange={handleChange}
                      />
                      <Input
-                        label="Last Name"
+                        label="Mobile"
                         clearable
                         bordered
                         fullWidth
                         size="lg"
-                        placeholder="Last Name"
+                        placeholder="Mobile"
+                        name="mobile"
+                        value={formData.mobile}
+                        onChange={handleChange}
                      />
                   </Flex>
 
@@ -67,9 +112,20 @@ export const AddUser = () => {
                      css={{
                         'gap': '$10',
                         'flexWrap': 'wrap',
-                        '@lg': {flexWrap: 'nowrap'},
+                        '@lg': { flexWrap: 'nowrap' },
                      }}
                   >
+                     <Input
+                        label="Age"
+                        clearable
+                        bordered
+                        fullWidth
+                        size="lg"
+                        placeholder="Age"
+                        name="age"
+                        value={formData.age}
+                        onChange={handleChange}
+                     />
                      <Input
                         label="Email"
                         clearable
@@ -77,49 +133,40 @@ export const AddUser = () => {
                         fullWidth
                         size="lg"
                         placeholder="Email"
-                     />
-                     <Input
-                        label="Phone Number"
-                        clearable
-                        bordered
-                        fullWidth
-                        size="lg"
-                        placeholder="Phone Number"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
                      />
                   </Flex>
                   <Flex
                      css={{
                         'gap': '$10',
                         'flexWrap': 'wrap',
-                        '@lg': {flexWrap: 'nowrap'},
+                        '@lg': { flexWrap: 'nowrap' },
                      }}
                   >
                      <Input
-                        label="Department"
+                        label="Interests"
                         clearable
                         bordered
                         fullWidth
                         size="lg"
-                        placeholder="Department"
-                     />
-                     <Input
-                        label="Company"
-                        clearable
-                        bordered
-                        fullWidth
-                        size="lg"
-                        placeholder="Company"
+                        placeholder="Interests (comma separated)"
+                        name="interest"
+                        value={formData.interest}
+                        onChange={handleChange}
                      />
                   </Flex>
                </Flex>
             </Modal.Body>
-            <Divider css={{my: '$5'}} />
+            <Divider css={{ my: '$5' }} />
             <Modal.Footer>
-               <Button auto onClick={closeHandler}>
+               <Button auto onPress={closeHandler}>
                   Add User
                </Button>
             </Modal.Footer>
          </Modal>
+         <ToastContainer />
       </div>
    );
 };

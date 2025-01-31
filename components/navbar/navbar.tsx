@@ -62,7 +62,7 @@ export const NavbarWrapper = ({children}: Props) => {
             <Navbar.Content showIn="md">
                <BurguerButton />
             </Navbar.Content>
-            <Navbar.Content
+            {/* <Navbar.Content
                hideIn={'md'}
                css={{
                   width: '100%',
@@ -92,23 +92,23 @@ export const NavbarWrapper = ({children}: Props) => {
                   }}
                   placeholder="Search..."
                />
-            </Navbar.Content>
+            </Navbar.Content> */}
             <Navbar.Content>
                <Navbar.Content hideIn={'md'}>
                   <Flex align={'center'} css={{gap: '$4'}}>
                      <FeedbackIcon />
-                     <Text span>Feedback?</Text>
+                     <Text span>List of Users</Text>
                   </Flex>
                </Navbar.Content>
 
-               <Navbar.Content>
+               {/* <Navbar.Content>
                   <NotificationsDropdown />
                </Navbar.Content>
 
                <Navbar.Content hideIn={'md'}>
                   <SupportIcon />
-               </Navbar.Content>
-               <Navbar.Content>
+               </Navbar.Content> */}
+               {/* <Navbar.Content>
                   <Link
                      href="https://github.com/"
                      target={'_blank'}
@@ -118,10 +118,10 @@ export const NavbarWrapper = ({children}: Props) => {
                </Navbar.Content>
                <Navbar.Content>
                   <UserDropdown />
-               </Navbar.Content>
+               </Navbar.Content> */}
             </Navbar.Content>
 
-            <Navbar.Collapse>
+            {/* <Navbar.Collapse>
                {collapseItems.map((item, index) => (
                   <Navbar.CollapseItem
                      key={item}
@@ -143,7 +143,7 @@ export const NavbarWrapper = ({children}: Props) => {
                      </Link>
                   </Navbar.CollapseItem>
                ))}
-            </Navbar.Collapse>
+            </Navbar.Collapse> */}
          </Navbar>
          {children}
       </Box>
