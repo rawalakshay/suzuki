@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 export const AddUser = ({ onUserAdded }) => {
   const [visible, setVisible] = useState(false);
-  const handler = () => setVisible(true);
 
   const [formData, setFormData] = useState({
     user: "",
@@ -80,12 +79,16 @@ export const AddUser = ({ onUserAdded }) => {
     }
   }
 
+  const closeHandler = () => {
+    setVisible(false);
+  };
+
   return (
     <div>
       <Button auto onClick={() => setVisible(true)}>
         Add User
       </Button>
-      <Modal open={visible} width="600px">
+      <Modal open={visible} onClose={closeHandler} preventClose width="600px">
         <Modal.Header css={{ justifyContent: "start" }}>
           <Text id="modal-title" h4>
             Add new user
@@ -185,6 +188,9 @@ export const AddUser = ({ onUserAdded }) => {
         </Modal.Body>
         <Divider css={{ my: "$5" }} />
         <Modal.Footer>
+          <Button auto flat color="error" onPress={closeHandler}>
+            Close
+          </Button>
           <Button auto onPress={handleSubmit}>
             Submit
           </Button>
