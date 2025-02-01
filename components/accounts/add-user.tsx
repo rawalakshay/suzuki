@@ -22,7 +22,6 @@ export const AddUser = ({ onUserAdded }) => {
   };
 
   const handleSubmit = async () => {
-    // Simple form validation
     if (
       !formData.user ||
       !formData.mobile ||
@@ -58,8 +57,16 @@ export const AddUser = ({ onUserAdded }) => {
 
       onUserAdded();
       setVisible(false);
-    } else {
-      toast.error("Error adding user!", {
+    }
+  };
+
+  async function addUser(userDetails: any) {
+    try {
+      await axios.post("http://localhost:3001/addUser", userDetails);
+      return true;
+    } catch (error) {
+      console.error("Error while adding user:", error);
+      toast.error(error.response.data.err || "Error adding user", {
         theme: "dark",
         position: "top-right",
         autoClose: 2000,
@@ -69,18 +76,6 @@ export const AddUser = ({ onUserAdded }) => {
         draggable: true,
         progress: undefined,
       });
-    }
-  };
-
-  async function addUser(userDetails: any) {
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/addUser",
-        userDetails
-      );
-      return true;
-    } catch (error) {
-      console.error("Error while adding user:", error);
       return false;
     }
   }

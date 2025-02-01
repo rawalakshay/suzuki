@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const morgan = require('morgan');
-
+const { body, validationResult } = require('express-validator');
 const connectDB = require('./database');
 connectDB();
 const User = require('./models/Users');
@@ -23,17 +23,33 @@ app.listen(PORT, () => {
 });
 
 app.get('/users', async (req, res) => {
-    let users = await User.find({});
-    console.log('users :>>', users);
-    return res.json({ message: 'success', data: users });
+    try {
+        const users = await User.find({});
+        res.json({ message: 'success', data: users });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
+    }
 });
 
-app.post("/addUser", async (req, res) => {
+app.post("/addUser", [
+    body('user').notEmpty().withMessage('User is required'),
+    body('interest').notEmpty().withMessage('Interest is required'),
+    body('age').isInt({ min: 18 }).withMessage('Age must be a number and at least 18'),
+    body('mobile')
+    .matches(/^[789]\d{9}$/)
+    .withMessage('Mobile number must be a valid Indian mobile number'),
+    body('email').isEmail().withMessage('Email is invalid')
+], async (req, res) => {
+    const errors = validationResult(req);
+    console.log('errors :>>', errors);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ err: errors.array()[0].msg });
+    }
+
     try {
         const { user, interest, age, mobile, email } = req.body;
-
-        console.log('interest :>>', interest);
-        let intArr = interest.split(',')
+        const intArr = interest.split(',');
 
         const newUser = new User({
             user,
@@ -44,10 +60,10 @@ app.post("/addUser", async (req, res) => {
         });
 
         await newUser.save();
-        return res.json({ message: "User added successfully" });
+        res.json({ message: "User added successfully" });
     } catch (error) {
         console.error("Error:", error);
-        return res.status(500).json({ message: "Internal Server Error", error });
+        res.status(500).json({ message: "Internal Server Error", error });
     }
 });
 
