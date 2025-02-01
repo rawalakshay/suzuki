@@ -56,9 +56,7 @@ export const AddUser = ({ onUserAdded }) => {
         progress: undefined,
       });
 
-      // Call onUserAdded to notify parent component
-      onUserAdded(formData);
-
+      onUserAdded();
       setVisible(false);
     } else {
       toast.error("Error adding user!", {
@@ -197,7 +195,6 @@ export const AddUser = ({ onUserAdded }) => {
           </Button>
         </Modal.Footer>
       </Modal>
-      <ToastContainer />
     </div>
   );
 };
