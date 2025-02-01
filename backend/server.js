@@ -30,13 +30,13 @@ app.get('/users', async (req, res) => {
 
 app.post("/addUser", async (req, res) => {
     try {
-        const { userName, interest, age, mobile, email } = req.body;
+        const { user, interest, age, mobile, email } = req.body;
 
         console.log('interest :>>', interest);
         let intArr = interest.split(',')
 
         const newUser = new User({
-            user: userName,
+            user,
             interest: intArr,
             age,
             mobile,

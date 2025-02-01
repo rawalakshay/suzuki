@@ -9,19 +9,8 @@ import axios from "axios";
 export const Content = () => {
   const [users, setUsers] = useState([]);
 
-  let columns = [
-    // { name: "#", uid: "_id" },
-    { name: "USER", uid: "user" },
-    { name: "INTEREST", uid: "interest" },
-    { name: "AGE", uid: "age" },
-    { name: "EMAIL", uid: "email" },
-    { name: "MOBILE", uid: "mobile" },
-  ];
-
-  let [data, setData] = useState([]);
-
+  // Fetch users on component mount
   useEffect(() => {
-    console.log("useEffect");
     const fetchData = async () => {
       try {
         const response = await axios.get("http://localhost:3001/users");
@@ -36,7 +25,7 @@ export const Content = () => {
     fetchData();
   }, []);
 
-  // Function to add a user dynamically
+  // Function to add a new user dynamically
   const handleUserAdded = (newUser: any) => {
     setUsers((prevUsers: any) => [...prevUsers, newUser]); // Append new user
   };
@@ -68,7 +57,7 @@ export const Content = () => {
             <AddUser onUserAdded={handleUserAdded} />
           </Flex>
         </Flex>
-        <TableWrapper users={users} />
+        <TableWrapper users={users} setUsers={setUsers} />
       </Flex>
     </Box>
   );

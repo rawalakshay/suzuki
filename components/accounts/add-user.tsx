@@ -1,17 +1,16 @@
 import { Button, Divider, Input, Modal, Text } from "@nextui-org/react";
-import React from "react";
+import React, { useState } from "react";
 import { Flex } from "../styles/flex";
-import { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-export const AddUser = () => {
+export const AddUser = ({ onUserAdded }) => {
   const [visible, setVisible] = useState(false);
   const handler = () => setVisible(true);
 
   const [formData, setFormData] = useState({
-    userName: "",
+    user: "",
     mobile: "",
     age: "",
     email: "",
@@ -19,17 +18,31 @@ export const AddUser = () => {
   });
 
   const handleChange = (e: any) => {
-    console.log("form e :>>", e.target.name, e.target.value);
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // const closeHandler = () => {
-  //   addUser(formData);
-  //   setVisible(false);
-  //   console.log("closed");
-  // };
-
   const handleSubmit = async () => {
+    // Simple form validation
+    if (
+      !formData.user ||
+      !formData.mobile ||
+      !formData.age ||
+      !formData.email ||
+      !formData.interest
+    ) {
+      toast.error("Please fill in all the fields", {
+        theme: "dark",
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+      return;
+    }
+
     let addUserStatus = await addUser(formData);
     if (addUserStatus) {
       toast.success("User added successfully!", {
@@ -42,6 +55,10 @@ export const AddUser = () => {
         draggable: true,
         progress: undefined,
       });
+
+      // Call onUserAdded to notify parent component
+      onUserAdded(formData);
+
       setVisible(false);
     } else {
       toast.error("Error adding user!", {
@@ -58,14 +75,11 @@ export const AddUser = () => {
   };
 
   async function addUser(userDetails: any) {
-    console.log("userDetails :>>", userDetails);
     try {
       const response = await axios.post(
         "http://localhost:3001/addUser",
         userDetails
       );
-
-      console.log("User added successfully:", response.data);
       return true;
     } catch (error) {
       console.error("Error while adding user:", error);
@@ -108,8 +122,8 @@ export const AddUser = () => {
                 fullWidth
                 size="lg"
                 placeholder="User Name"
-                name="userName"
-                value={formData.userName}
+                name="user"
+                value={formData.user}
                 onChange={handleChange}
               />
               <Input
