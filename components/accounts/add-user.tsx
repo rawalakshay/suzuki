@@ -23,19 +23,15 @@ export const AddUser = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const closeHandler = () => {
-    addUser(formData);
-    setVisible(false);
-    console.log("closed");
-  };
+  // const closeHandler = () => {
+  //   addUser(formData);
+  //   setVisible(false);
+  //   console.log("closed");
+  // };
 
-  async function addUser(userDetails: any) {
-    console.log("userDetails :>>", userDetails);
-    try {
-      const response = await axios.post(
-        "http://localhost:3001/addUser",
-        userDetails
-      );
+  const handleSubmit = async () => {
+    let addUserStatus = await addUser(formData);
+    if (addUserStatus) {
       toast.success("User added successfully!", {
         theme: "dark",
         position: "top-right",
@@ -46,24 +42,43 @@ export const AddUser = () => {
         draggable: true,
         progress: undefined,
       });
+      setVisible(false);
+    } else {
+      toast.error("Error adding user!", {
+        theme: "dark",
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      });
+    }
+  };
+
+  async function addUser(userDetails: any) {
+    console.log("userDetails :>>", userDetails);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/addUser",
+        userDetails
+      );
+
       console.log("User added successfully:", response.data);
+      return true;
     } catch (error) {
       console.error("Error while adding user:", error);
+      return false;
     }
   }
 
   return (
     <div>
-      <Button auto onClick={handler}>
+      <Button auto onClick={() => setVisible(true)}>
         Add User
       </Button>
-      <Modal
-        closeButton
-        aria-labelledby="modal-title"
-        width="600px"
-        open={visible}
-        // onClose={closeHandler}
-      >
+      <Modal open={visible} width="600px">
         <Modal.Header css={{ justifyContent: "start" }}>
           <Text id="modal-title" h4>
             Add new user
@@ -163,8 +178,8 @@ export const AddUser = () => {
         </Modal.Body>
         <Divider css={{ my: "$5" }} />
         <Modal.Footer>
-          <Button auto onPress={closeHandler}>
-            Add User
+          <Button auto onPress={handleSubmit}>
+            Submit
           </Button>
         </Modal.Footer>
       </Modal>

@@ -16,21 +16,21 @@ export const TableWrapper = () => {
     { name: "MOBILE", uid: "mobile" },
   ];
 
-  let [data, setData] = useState([]);
+  // let [data, setData] = useState([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("http://localhost:3001/users");
-        let data = response.data.data;
-        setData(data);
-      } catch (err) {
-        console.error("fetchData err :>>", err);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:3001/users");
+  //       let data = response.data.data;
+  //       setData(data);
+  //     } catch (err) {
+  //       console.error("fetchData err :>>", err);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <Box
@@ -40,7 +40,7 @@ export const TableWrapper = () => {
         },
       }}
     >
-      <Table
+      {/* <Table
         aria-label="Example table with custom cells"
         css={{
           height: "auto",
@@ -84,7 +84,7 @@ export const TableWrapper = () => {
           rowsPerPage={10}
           onPageChange={(page) => console.log({ page })}
         />
-      </Table>
+      </Table> */}
     </Box>
   );
 };
