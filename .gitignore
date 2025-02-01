@@ -38,3 +38,4 @@ yarn-error.log*
 next-env.d.ts
 /.github/
 backend/node_modules
+backend/.env
